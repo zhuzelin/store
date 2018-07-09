@@ -33,13 +33,13 @@ export default {
       // post请求地址 请求的数据
       const res = await this.$http.post('login', this.formData);
       // 相当于在回调函数中书写的代码
-      console.log(res);
+      // console.log(res);
       const data = res.data;
       const { meta: { status, msg } } = data;
       if (status === 200) {
         // 提示
         this.$message.success(msg);
-        console.log(this);
+        // console.log(this);
         // 记录token
         const { data: { token } } = data;
         sessionStorage.setItem('token', token);

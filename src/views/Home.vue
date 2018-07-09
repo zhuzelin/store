@@ -62,7 +62,9 @@
       </el-menu>
     </el-aside>
     <!-- 主体部分 -->
-    <el-main>Main</el-main>
+    <el-main class="main">
+      <router-view></router-view>
+    </el-main>
   </el-container>
 </el-container>
 </template>
@@ -126,7 +128,5 @@ export default {
 .el-main {
   background-color: #E9EEF3;
   color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 </style>
