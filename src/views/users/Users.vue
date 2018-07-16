@@ -1,11 +1,7 @@
 <template>
 <!-- 面包屑 -->
   <el-card class="box-card">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-    <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <my-breadcrumb level1="用户管理" level2="用户列表"></my-breadcrumb>
     <!-- 输入框 -->
     <el-row class="search">
     <el-col :span="24">
@@ -374,16 +370,17 @@ export default {
     async loadData() {
       // 发送异步请求之前
       this.loading = true;
-      // 发送请求之前 获取token
-      const token = sessionStorage.getItem('token');
-      // 在请求头中设置token
-      this.$http.defaults.headers.common['Authorization'] = token;
+      // // 发送请求之前 获取token
+      // const token = sessionStorage.getItem('token');
+      // // 在请求头中设置token
+      // this.$http.defaults.headers.common['Authorization'] = token;
       const res = await this.$http.get(`users?pagenum=${this.pagenum}&pagesize=${this.pagesize}&query=${this.searchValue}`);
       // 异步请求结束
       this.loading = false;
       // 获取响应数据
       const data = res.data;
       // meta中的msg 和 status
+      // 在data中找到meta属性 然后再找到meta下的msg和status属性赋值给声明的msg和status变量
       const { meta: { msg, status } } = data;
       if (status === 200) {
         const { data: { users, total } } = data;

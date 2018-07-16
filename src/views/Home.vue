@@ -21,44 +21,25 @@
       class="menu"
       :router="true"
       :unique-opened="true">
-      <el-submenu index="1">
+      <!-- 一级菜单 -->
+      <el-submenu
+        v-for="item in menus"
+        :key = "item.id"
+        :index="item.id + ''">
         <template slot="title">
           <i class="el-icon-location"></i>
-          <span>用户管理</span>
+          <span>{{ item.authName }}</span>
+
         </template>
-          <el-menu-item index="/users"><i class="el-icon-menu"></i>用户列表</el-menu-item>
+          <el-menu-item
+            v-for="item1 in item.children"
+            :key="item1.id"
+            :index="'/' + item1.path">
+            <i class="el-icon-menu"></i>
+            {{ item1.authName }}
+          </el-menu-item>
       </el-submenu>
-      <el-submenu index="2">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>权限管理</span>
-        </template>
-          <el-menu-item index="/roles"><i class="el-icon-menu"></i>角色列表</el-menu-item>
-          <el-menu-item index="/rights"><i class="el-icon-menu"></i>权限列表</el-menu-item>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>商品管理</span>
-        </template>
-          <el-menu-item index="3-1"><i class="el-icon-menu"></i>商品列表</el-menu-item>
-          <el-menu-item index="3-2"><i class="el-icon-menu"></i>分类参数</el-menu-item>
-          <el-menu-item index="3-3"><i class="el-icon-menu"></i>商品分类</el-menu-item>
-      </el-submenu>
-      <el-submenu index="4">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>订单管理</span>
-        </template>
-          <el-menu-item index="4-2"><i class="el-icon-menu"></i>订单列表</el-menu-item>
-      </el-submenu>
-      <el-submenu index="5">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>数据统计</span>
-        </template>
-          <el-menu-item index="5-1"><i class="el-icon-menu"></i>数据报表</el-menu-item>
-      </el-submenu>
+
       </el-menu>
     </el-aside>
     <!-- 主体部分 -->
@@ -71,6 +52,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      menus: []
+    };
+  },
   // 判断是否登陆
   beforeCreate() {
     const token = sessionStorage.getItem('token');
@@ -81,7 +67,20 @@ export default {
       this.$router.push({ name: 'login' });
     }
   },
+  created() {
+    this.loadData();
+  },
   methods: {
+    async loadData() {
+      const { data: resData } = await this.$http.get('menus');
+      const { data, meta: { status, msg } } = resData;
+      if (status === 200) {
+        this.menus = data;
+      } else {
+        this.$message.error(msg);
+      }
+    },
+    // 退出
     handleLogout () {
       // 删除sessionStrorage
       sessionStorage.removeItem('token');

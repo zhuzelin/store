@@ -3,4 +3,9 @@ body,h2 {
     padding: 0;
     margin: 0;
     height: 100%;
+};
+
+.box-card {
+    height: 100%;
+    overflow: auto;
 }
